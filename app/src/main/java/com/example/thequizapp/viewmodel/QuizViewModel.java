@@ -13,7 +13,7 @@ public class QuizViewModel extends ViewModel {
 
     public QuizViewModel() {
         this.quizRepository = new QuizRepository();
-        this.questionListMutableLiveData = quizRepository.getQuestionsListFromAPI();
+        this.questionListMutableLiveData = quizRepository.getQuestionListFromAPI();
     }
 
     public MutableLiveData<QuestionList> getQuestionListMutableLiveData() {

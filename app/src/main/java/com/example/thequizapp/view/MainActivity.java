@@ -26,12 +26,12 @@ import com.example.thequizapp.viewmodel.QuizViewModel;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    ActivityMainBinding mainBinding;
-    QuizViewModel quizViewModel;
-    List<Question> questionsList;
-    static int result = 0;
-    static int totalQuestions = 0;
-    int i = 0;
+    private ActivityMainBinding mainBinding;
+    private QuizViewModel quizViewModel;
+    private List<Question> questionsList;
+    private int result = 0;
+    private int totalQuestions = 0;
+    private int currentIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,25 +44,14 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        // databinding
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
-        // creating instance view model
         quizViewModel = new ViewModelProvider(this).get(QuizViewModel.class);
-
-        // resetting score
         result = 0;
         totalQuestions = 0;
 
-        // display first question
         displayFirstQuestion();
 
-        mainBinding.btnNextQuestion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayNextQuestions();
-            }
-        });
+        mainBinding.btnNextQuestion.setOnClickListener(v -> displayNextQuestions());
     }
 
     private void displayFirstQuestion() {
@@ -97,31 +86,31 @@ public class MainActivity extends AppCompatActivity {
 
             // ktra xem con co cau hoi nao chua dc hien thi hay khong
             // neu tong so cau hoi - i (so cau hoi hien tai) > 0 tuc la con` co cau hoi chua dc hien thi
-            if ((questionsList.size() - i) > 0) {
+            if ((questionsList.size() - currentIndex) > 0) {
                 totalQuestions = questionsList.size();
                 // neu option la correct option
-                if (radioButtonOption.getText().toString().equals(questionsList.get(i).getCorrectOption())) {
+                if (radioButtonOption.getText().toString().equals(questionsList.get(currentIndex).getCorrectOption())) {
                     result++; // ket qua tang them 1
                     mainBinding.txtCorrectResult.setText("Correct Answers: " + result);
                 }
 
-                if (i == 0) i++;
+                if (currentIndex == 0) currentIndex++;
 
                 // Displaying the next Questions
-                mainBinding.txtQuestion.setText("Question " + (i + 1) + ": " + questionsList.get(i).getQuestion());
-                mainBinding.txtOption1.setText(questionsList.get(i).getOption1());
-                mainBinding.txtOption2.setText(questionsList.get(i).getOption2());
-                mainBinding.txtOption3.setText(questionsList.get(i).getOption3());
-                mainBinding.txtOption4.setText(questionsList.get(i).getOption4());
+                mainBinding.txtQuestion.setText("Question " + (currentIndex + 1) + ": " + questionsList.get(currentIndex).getQuestion());
+                mainBinding.txtOption1.setText(questionsList.get(currentIndex).getOption1());
+                mainBinding.txtOption2.setText(questionsList.get(currentIndex).getOption2());
+                mainBinding.txtOption3.setText(questionsList.get(currentIndex).getOption3());
+                mainBinding.txtOption4.setText(questionsList.get(currentIndex).getOption4());
 
                 // Check if it is the last question
-                if (i == (questionsList.size() - 1)) {
+                if (currentIndex == (questionsList.size() - 1)) {
                     mainBinding.btnNextQuestion.setText("Finish");
                 }
                 mainBinding.radioGroup.clearCheck();
-                i++;
+                currentIndex++;
             } else {
-                if (radioButtonOption.getText().toString().equals(questionsList.get(i - 1).getCorrectOption())) {
+                if (radioButtonOption.getText().toString().equals(questionsList.get(currentIndex - 1).getCorrectOption())) {
                     result++;
                     mainBinding.txtCorrectResult.setText("Correct Answers: " + result);
                 }

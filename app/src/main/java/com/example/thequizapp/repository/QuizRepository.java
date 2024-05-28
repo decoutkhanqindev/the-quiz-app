@@ -22,7 +22,7 @@ public class QuizRepository {
         this.questionListMutableLiveData = new MutableLiveData<>();
     }
 
-    public MutableLiveData<QuestionList> getQuestionsListFromAPI() {
+    public MutableLiveData<QuestionList> getQuestionListFromAPI() {
         Call<QuestionList> call = questionsAPI.getQuestionsAPI();
         call.enqueue(new Callback<QuestionList>() {
             @Override
