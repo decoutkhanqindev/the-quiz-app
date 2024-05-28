@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config xmlns:tools="http://schemas.android.com/tools">
+    <base-config
+        cleartextTrafficPermitted="true"
+        tools:ignore="InsecureBaseConfiguration">
+        <!---Thuộc tính này cho phép lưu lượng không mã hóa (cleartext traffic).
+        Điều này có nghĩa là ứng dụng được phép gửi và nhận dữ liệu qua các kết nối HTTP không bảo mật.
+        Điều này có thể gây ra rủi ro bảo mật nếu không được sử dụng cẩn thận, vì dữ liệu có thể bị
+        nghe trộm hoặc bị tấn công bởi các tác nhân độc hại.-->
+        <trust-anchors>
+            <certificates src="system" />
+            <!--Phần tử này chỉ định rằng ứng dụng sẽ sử dụng các chứng chỉ gốc của hệ thống (system certificates)
+            để xác thực các kết nối SSL/TLS. Điều này có nghĩa là ứng dụng sẽ tin cậy vào các chứng chỉ được
+            cài đặt sẵn trong hệ điều hành Android.-->
+        </trust-anchors>
+    </base-config>
+</network-security-config>

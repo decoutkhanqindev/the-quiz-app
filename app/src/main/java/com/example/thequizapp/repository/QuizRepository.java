@@ -1,5 +1,7 @@
 package com.example.thequizapp.repository;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
@@ -13,11 +15,10 @@ import retrofit2.Response;
 
 public class QuizRepository {
     private final QuestionsAPI questionsAPI;
-    private MutableLiveData<QuestionList> questionListMutableLiveData;
+    private final MutableLiveData<QuestionList> questionListMutableLiveData;
     public QuizRepository() {
-        this.questionsAPI = new RetrofitInstance()
-                .getRetrofitInstance()
-                .create(QuestionsAPI.class);
+        this.questionsAPI = new RetrofitInstance().getRetrofitInstance().create(QuestionsAPI.class);
+        this.questionListMutableLiveData = new MutableLiveData<>();
     }
 
     public MutableLiveData<QuestionList> getQuestionsListFromAPI(){
@@ -25,12 +26,17 @@ public class QuizRepository {
         response.enqueue(new Callback<QuestionList>() {
             @Override
             public void onResponse(@NonNull Call<QuestionList> call, @NonNull Response<QuestionList> response) {
-                QuestionList questionsListFromAPi = response.body();
-                questionListMutableLiveData.setValue(questionsListFromAPi);
+                if (response.isSuccessful() && response.body() != null) {
+                    QuestionList questionsListFromAPi = response.body();
+                    questionListMutableLiveData.setValue(questionsListFromAPi);
+                } else{
+                    Log.e("QuizRepository", "Response not successful: " + response.message());
+                }
             }
 
             @Override
             public void onFailure(@NonNull Call<QuestionList> call, @NonNull Throwable throwable) {
+                Log.e("QuizRepository", "API call failed", throwable);
             }
         });
 
