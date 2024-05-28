@@ -26,12 +26,8 @@ public class QuizRepository {
         response.enqueue(new Callback<QuestionList>() {
             @Override
             public void onResponse(@NonNull Call<QuestionList> call, @NonNull Response<QuestionList> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    QuestionList questionsListFromAPi = response.body();
-                    questionListMutableLiveData.setValue(questionsListFromAPi);
-                } else{
-                    Log.e("QuizRepository", "Response not successful: " + response.message());
-                }
+                QuestionList questionsListFromAPi = response.body();
+                questionListMutableLiveData.setValue(questionsListFromAPi);
             }
 
             @Override

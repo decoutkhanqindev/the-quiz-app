@@ -1,9 +1,11 @@
 package com.example.thequizapp.view;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.RadioButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -78,6 +80,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayFirstQuestions() {
+        // Direct the user to the Results activity
+        if(mainBinding.btnNextQuestion.getText().equals("Finish")){
+            Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
+        // Displaying the question
+        int selectedOption = mainBinding.radioGroup.getCheckedRadioButtonId();
+        if (selectedOption != -1){
+            RadioButton option = findViewById(selectedOption);
+            // More Questions to Display??
+            if()
+        }
     }
 }
