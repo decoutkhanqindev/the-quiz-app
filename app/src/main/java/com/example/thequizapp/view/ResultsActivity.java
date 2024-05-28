@@ -1,5 +1,6 @@
 package com.example.thequizapp.view;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.example.thequizapp.databinding.ActivityResultsBinding;
 public class ResultsActivity extends AppCompatActivity {
     ActivityResultsBinding resultsBinding;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,8 +30,8 @@ public class ResultsActivity extends AppCompatActivity {
             return insets;
         });
 
-        resultsBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
+        resultsBinding = DataBindingUtil.setContentView(this, R.layout.activity_results);
+        resultsBinding.txtAnswers.setText("Your Score is : " + MainActivity.result + "/" + MainActivity.totalQuestions);
         resultsBinding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

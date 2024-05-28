@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     static int result = 0;
     static int totalQuestions = 0;
     int i = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,12 +60,12 @@ public class MainActivity extends AppCompatActivity {
         mainBinding.btnNextQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                displayFirstQuestions();
+                displayNextQuestions();
             }
         });
     }
 
-    private void displayFirstQuestion(){
+    private void displayFirstQuestion() {
         // observing livedata from a viewmodel
         quizViewModel.getQuestionListMutableLiveData().observe(this, new Observer<QuestionList>() {
             @SuppressLint("SetTextI18n")
@@ -79,9 +81,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void displayFirstQuestions() {
+    @SuppressLint("SetTextI18n")
+    private void displayNextQuestions() {
         // Direct the user to the Results activity
-        if(mainBinding.btnNextQuestion.getText().equals("Finish")){
+        if (mainBinding.btnNextQuestion.getText().equals("Finish")) {
             Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
             startActivity(intent);
             finish();
@@ -89,10 +92,42 @@ public class MainActivity extends AppCompatActivity {
 
         // Displaying the question
         int selectedOption = mainBinding.radioGroup.getCheckedRadioButtonId();
-        if (selectedOption != -1){
-            RadioButton option = findViewById(selectedOption);
-            // More Questions to Display??
-            if()
+        if (selectedOption != -1) { // neu da chon option thi lay ra id cua option do
+            RadioButton radioButtonOption = findViewById(selectedOption);
+
+            // ktra xem con co cau hoi nao chua dc hien thi hay khong
+            // neu tong so cau hoi - i (so cau hoi hien tai) > 0 tuc la con` co cau hoi chua dc hien thi
+            if ((questionsList.size() - i) > 0) {
+                totalQuestions = questionsList.size();
+                // neu option la correct option
+                if (radioButtonOption.getText().toString().equals(questionsList.get(i).getCorrectOption())) {
+                    result++; // ket qua tang them 1
+                    mainBinding.txtCorrectResult.setText("Correct Answers: " + result);
+                }
+
+                if (i == 0) i++;
+
+                // Displaying the next Questions
+                mainBinding.txtQuestion.setText("Question " + (i + 1) + ": " + questionsList.get(i).getQuestion());
+                mainBinding.txtOption1.setText(questionsList.get(i).getOption1());
+                mainBinding.txtOption2.setText(questionsList.get(i).getOption2());
+                mainBinding.txtOption3.setText(questionsList.get(i).getOption3());
+                mainBinding.txtOption4.setText(questionsList.get(i).getOption4());
+
+                // Check if it is the last question
+                if (i == (questionsList.size() - 1)) {
+                    mainBinding.btnNextQuestion.setText("Finish");
+                }
+                mainBinding.radioGroup.clearCheck();
+                i++;
+            } else {
+                if (radioButtonOption.getText().toString().equals(questionsList.get(i - 1).getCorrectOption())) {
+                    result++;
+                    mainBinding.txtCorrectResult.setText("Correct Answers: " + result);
+                }
+            }
+        } else {
+            Toast.makeText(this, "You need to make a selection", Toast.LENGTH_SHORT).show();
         }
     }
 }
