@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding mainBinding;
     private QuizViewModel quizViewModel;
     private List<Question> questionsList;
-    private int result = 0;
-    private int totalQuestions = 0;
+    static int result = 0;
+    static int totalQuestions = 0;
     private int currentIndex = 0;
 
     @Override
