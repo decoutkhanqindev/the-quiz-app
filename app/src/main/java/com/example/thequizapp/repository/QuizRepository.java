@@ -16,18 +16,22 @@ import retrofit2.Response;
 public class QuizRepository {
     private final QuestionsAPI questionsAPI;
     private final MutableLiveData<QuestionList> questionListMutableLiveData;
+
     public QuizRepository() {
         this.questionsAPI = new RetrofitInstance().getRetrofitInstance().create(QuestionsAPI.class);
         this.questionListMutableLiveData = new MutableLiveData<>();
     }
 
-    public MutableLiveData<QuestionList> getQuestionsListFromAPI(){
-        Call<QuestionList> response = questionsAPI.getQuestionsAPI();
-        response.enqueue(new Callback<QuestionList>() {
+    public MutableLiveData<QuestionList> getQuestionsListFromAPI() {
+        Call<QuestionList> call = questionsAPI.getQuestionsAPI();
+        call.enqueue(new Callback<QuestionList>() {
             @Override
             public void onResponse(@NonNull Call<QuestionList> call, @NonNull Response<QuestionList> response) {
-                QuestionList questionsListFromAPi = response.body();
-                questionListMutableLiveData.setValue(questionsListFromAPi);
+                if (response.isSuccessful()) {
+                    questionListMutableLiveData.setValue(response.body());
+                } else {
+                    Log.e("QuizRepository", "API call failed with code: " + response.code());
+                }
             }
 
             @Override
@@ -39,3 +43,4 @@ public class QuizRepository {
         return questionListMutableLiveData;
     }
 }
+
